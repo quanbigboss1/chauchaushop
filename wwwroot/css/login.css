@@ -1,0 +1,116 @@
+﻿/* Container login bên trái */
+.login-container {
+    display: flex;
+    justify-content: flex-start; /* bên trái */
+    align-items: flex-start;
+    padding: 50px;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff; /* trắng, không gradient */
+}
+
+/* Card login */
+.login-card {
+    background-color: #f9f9f9;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 350px;
+}
+
+    /* Tiêu đề */
+    .login-card h2 {
+        margin-bottom: 25px;
+        color: #333;
+    }
+
+/* Input group */
+.input-group {
+    margin-bottom: 20px;
+}
+
+    .input-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+        font-weight: 500;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .input-group input:focus {
+            border-color: #2575fc;
+            box-shadow: 0 0 5px rgba(37, 117, 252, 0.3);
+            outline: none;
+        }
+
+/* Button login */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background-color: #2575fc;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .btn-login:hover {
+        background-color: #1a5ed1;
+    }
+
+/* Alert */
+.alert {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+.alert-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+/* Link đăng ký */
+.register-link {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+    .register-link a {
+        color: #2575fc;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+/* Responsive */
+@media (max-width: 400px) {
+    .login-card {
+        width: 90%;
+        padding: 30px 20px;
+    }
+
+    .login-container {
+        padding: 20px;
+        justify-content: center;
+    }
+}

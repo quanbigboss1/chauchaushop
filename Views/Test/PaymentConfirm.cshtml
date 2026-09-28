@@ -1,0 +1,65 @@
+﻿@model ChauChau.Models.DonHang
+
+@{
+    ViewData["Title"] = "Xác nhận Thanh toán";
+}
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3>Xác nhận thanh toán</h3>
+        </div>
+        <div class="card-body">
+            <h5>@ViewBag.Message</h5>
+
+            <p><strong>Mã đơn hàng:</strong> @Model.DonHangId</p>
+            <p><strong>Ngày đặt:</strong> @Model.NgayDat.ToString("dd/MM/yyyy HH:mm")</p>
+            <p><strong>Tổng tiền:</strong> @Model.TongTien.ToString("N0") VNĐ</p>
+            <p>
+                <strong>Trạng thái:</strong>
+                @if (Model.TrangThai == "DaThanhToan")
+                {
+                    <span class="text-success">@Model.TrangThai</span>
+                }
+                else if (Model.TrangThai == "ThatBai")
+                {
+                    <span class="text-danger">@Model.TrangThai</span>
+                }
+                else
+                {
+                    <span class="text-warning">@Model.TrangThai</span>
+                }
+            </p>
+
+            <hr />
+
+            <h5>Chi tiết đơn hàng</h5>
+            <table class="table table-bordered table-striped mt-2">
+                <thead class="table-light">
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Tổng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ChiTietDonHangs)
+                    {
+                        <tr>
+                            <td>@item.SanPhamVariant.SanPham.TenSanPham</td>
+                            <td>@item.Gia.ToString("N0") VNĐ</td>
+                            <td>@item.SoLuong</td>
+                            <td>@((item.SoLuong * item.Gia).ToString("N0")) VNĐ</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="text-end mt-3">
+                <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Quay về trang chủ</a>
+            </div>
+        </div>
+    </div>
+</div>

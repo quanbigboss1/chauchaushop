@@ -1,0 +1,326 @@
+﻿@{
+    ViewData["Title"] = "Trang Chủ";
+    Layout = "_Layout";
+}
+<head>
+    <link rel="stylesheet" href="~/css/welcome.css" asp-append-version="true" />
+    <style>
+        :root {
+            --ccf-accent: #e63946; /* màu chủ đạo */
+            --ccf-muted: #6b6f76; /* chữ phụ */
+            --ccf-bg: #ffffff; /* nền box */
+            --ccf-border: #ececec; /* viền nhẹ */
+            --ccf-radius: 12px;
+            --ccf-font: "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* Container chỉnh chung (nếu bạn muốn box riêng) */
+        .contact-card {
+            background: var(--ccf-bg);
+            border: 1px solid var(--ccf-border);
+            border-radius: var(--ccf-radius);
+            padding: 22px;
+            box-shadow: 0 6px 18px rgba(34,34,34,0.06);
+            font-family: var(--ccf-font);
+        }
+
+        /* Tiêu đề */
+        .contact-title {
+            font-size: 1.35rem;
+            margin: 0 0 12px 0;
+            color: #222;
+            letter-spacing: 0.2px;
+            line-height: 1.25;
+            font-weight: 700;
+        }
+
+        /* Danh sách liên hệ */
+        .contact-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .contact-list li {
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 10px 0;
+                border-bottom: 1px dashed rgba(0,0,0,0.04);
+                color: var(--ccf-muted);
+                font-size: 0.95rem;
+                line-height: 1.45;
+            }
+
+                /* Xử lý item cuối cùng không cần border */
+                .contact-list li:last-child {
+                    border-bottom: none;
+                }
+
+                /* Icon (giả sử bạn dùng ZMDI/Font Awesome) */
+                .contact-list li i {
+                    font-size: 1.25rem;
+                    min-width: 28px;
+                    text-align: center;
+                    margin-top: 2px;
+                    color: var(--ccf-accent);
+                    display: inline-block;
+                }
+
+                /* Phần nhấn mạnh (strong) */
+                .contact-list li strong {
+                    color: #111;
+                    margin-right: 6px;
+                    font-weight: 600;
+                }
+
+        /* Khoảng cách giữa 2 block danh sách (class mt-4) */
+        .mt-4 {
+            margin-top: 1rem !important;
+        }
+
+    </style>
+</head>
+<div class="page-wrapper">
+    <div class="side-bg"></div> <!-- Bên trái -->
+    <div class="content-area">
+
+        <!-- ====================== CAROUSEL SLIDER ====================== -->
+        <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+
+            <div class="carousel-inner">
+
+                <div class="carousel-item active">
+                    <div class="banner-dark">
+                        <img src="/img/banner1.jpg" class="d-block w-100" />
+                        <div class="banner-text">
+                            <h1>Bộ sưu tập Thu – Đông</h1>
+                            <p>Phong cách mới • Chất lượng mới • Trải nghiệm mới</p>
+                            <a href="/SanPham/Index" class="btn btn-light btn-lg mt-2">Khám phá ngay</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="banner-dark">
+                        <img src="/img/banner2.jpg" class="d-block w-100" />
+                        <div class="banner-text">
+                            <h1>Ưu đãi Black Friday</h1>
+                            <p>Giảm đến 70% - Duy nhất hôm nay!</p>
+                            <a href="/SanPham/Sale" class="btn btn-warning btn-lg mt-2">Mua ngay</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="banner-dark">
+                        <img src="/img/banner3.jpg" class="d-block w-100" />
+                        <div class="banner-text">
+                            <h1>New Arrivals</h1>
+                            <p>Cập nhật xu hướng thời trang 2025</p>
+                            <a href="/SanPham/New" class="btn btn-light btn-lg mt-2">Xem ngay</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+
+
+        <section class="section sale-section">
+            <div class="d-flex justify-content-between align-items-center" style="padding:10px 20px">
+                <h2>Bán chạy nhất 🔥</h2>
+            </div>
+
+            <div class="row mt-3" style="padding:20px 30px">
+
+                @foreach (var sp in ViewBag.SanPhamBanChay)
+                {
+                    var variants = sp.Variants as IEnumerable<ChauChau.Models.SanPhamVariant>;
+                    var variant = variants?.FirstOrDefault();
+
+                    var img = variant?.HinhAnhs?.FirstOrDefault()?.HinhAnh ?? "/img/none.png";
+                    decimal gia = variant?.Gia ?? 0;
+
+                    <div class="col-md-3 mb-4">
+                        <div class="card sale-card shadow-sm" style="height:345px">
+
+                            <!-- ảnh sản phẩm -->
+                            <img src="@img" class="card-img-top" style="height:220px; object-fit:cover;" />
+
+                            <div class="card-body text-center">
+                                <a style="font-size:17px;font-weight:600" asp-controller="Product" asp-action="Details"
+                                   asp-route-id="@sp.SanPhamId"
+                                   asp-route-name="@Uri.EscapeDataString(sp.TenSanPham)">
+                                    @sp.TenSanPham
+                                </a>
+
+                                @if (gia > 0)
+                                {
+                                    <p class="text-danger fw-bold">
+                                        @gia.ToString("N0")₫
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="fw-bold text-secondary">Chưa có giá</p>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </section>
+
+
+
+        <!-- ====================== BEST SELLER ====================== -->
+        <section class="section best-section">
+            <h2 class="text-center mb-4">Sản phẩm hot</h2>
+
+            <div class="row">
+
+                @{
+                    var list = ViewBag.SanPhamHot as List<SanPham>;
+                    int soLuong = list?.Count ?? 0;
+
+                    /* 1. Hiển thị sản phẩm thật */
+                    if (list != null)
+                    {
+                        foreach (var sp in list)
+                        {
+                            // Lấy variant đầu tiên của sản phẩm
+                            var variant = sp.Variants?.FirstOrDefault();
+
+                            // Lấy hình ảnh đầu tiên của variant
+                            var hinh = variant?.HinhAnhs?.FirstOrDefault()?.HinhAnh
+                            ?? "/img/none.png";
+
+                            // Lấy giá
+                            var gia = variant?.Gia ?? 0;
+
+                            <div class="col-md-3 mb-4">
+                                <div class="card best-card" style="min-height:355px">
+                                    <img src="@hinh" class="card-img-top" />
+
+                                    <div class="card-body text-center">
+                                        <a style="font-size:17px;font-weight:600" asp-controller="Product" asp-action="Details"
+                                           asp-route-id="@sp.SanPhamId"
+                                           asp-route-name="@Uri.EscapeDataString(sp.TenSanPham)">
+                                            @sp.TenSanPham
+                                        </a>
+                                        @if (gia > 0)
+                                        {
+                                            <p class="fw-bold text-primary">@gia.ToString("N0")₫</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-muted">—</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    /* 2. Bù thêm sản phẩm NONE nếu không đủ 4 */
+                    int thieu = 4 - soLuong;
+
+                    for (int i = 0; i < thieu; i++)
+                    {
+                        <div class="col-md-3 mb-4">
+                            <div class="card best-card">
+                                <img src="/img/none.png" class="card-img-top" />
+
+                                <div class="card-body text-center">
+                                    <h5>Sản phẩm</h5>
+                                    <p class="text-muted">—</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+        </section>
+
+
+        <!-- ====================== NEW COLLECTION ====================== -->
+        <section class="section new-collection">
+            <h2 class="text-center mb-4">Địa chỉ liên hệ</h2>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <img src="/img/fridayblack.jpg" class="card-img-top" style="border-radius:50px" />
+                </div>
+
+                <div class="col-md-6 d-flex align-items-center">
+                    <div class="contact-card">
+                        <h3 class="contact-title">Cửa hàng quần áo Châu Châu Fashion</h3>
+
+                        <ul class="contact-list">
+                            <li>
+                                <i class="zmdi zmdi-headset"></i>
+                                <strong>Hotline:</strong> 1900.80xx
+                            </li>
+
+                            <li>
+                                <i class="zmdi zmdi-time"></i>
+                                <strong>Thời gian mở cửa: </strong>  8:00 – 19h Thứ 2 – Thứ 7
+                            </li>
+
+                            <li>
+                                <i class="zmdi zmdi-pin"></i>
+                                <strong style="width:120px">Chi nhánh 1:</strong>
+                                236B Lê Văn Sỹ, Phường Tân Sơn Hòa, TP. Hồ Chí Minh.
+                            </li>
+                        </ul>
+                        <ul class="contact-list mt-4">
+                            <li>
+                                <i class="zmdi zmdi-pin"></i>
+                                <strong style="width:120px">Chi nhánh 2:</strong>
+                                MMHR+5Q7, Nhơn Đức, Nhà Bè, Thành phố Hồ Chí Minh.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+    <div class="side-bg" style="background-color"></div> <!-- Bên phải -->
+</div>
+
+<script>
+    function startCountdown() {
+        const end = new Date().getTime() + 6 * 60 * 60 * 1000;
+        const timer = setInterval(() => {
+            let now = new Date().getTime();
+            let diff = end - now;
+
+            if (diff <= 0) {
+                clearInterval(timer);
+                document.getElementById("countdown").innerHTML = "Hết giờ";
+                return;
+            }
+
+            let h = Math.floor(diff / (1000 * 60 * 60));
+            let m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            let s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerHTML = `${h}h : ${m}m : ${s}s`;
+        }, 1000);
+    }
+    startCountdown();
+</script>

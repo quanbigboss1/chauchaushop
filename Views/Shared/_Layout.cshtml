@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ChauChau</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+    <!-- Material Design Iconic Font -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-design-iconic-font@2.2.0/dist/css/material-design-iconic-font.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .layout-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .layout-content {
+            flex: 1; /* Chiếm toàn bộ không gian còn lại */
+            display: flex;
+            flex-direction: column;
+        }
+        /* Giỏ hàng chỉ hiển thị số, không có vòng đỏ */
+        .cart-wrapper {
+            position: relative;
+            display: inline-block;
+            font-size: 24px;
+        }
+
+            .cart-wrapper .cart-count {
+                position: absolute;
+                top: -5px;
+                right: -8px;
+                font-size: 14px;
+                font-weight: bold;
+                color: black;
+                background: none; /* Không màu đỏ */
+            }
+    </style>
+</head>
+<body>
+    <div class="layout-wrapper">
+    <!-- TOP BAR -->
+    <div class="topbar">
+        <div class="container d-flex justify-content-between">
+            <div>Miễn phí vận chuyển đơn hàng trên 500.000₫</div>
+            <div class="d-flex gap-3">
+                <a asp-controller="Home" asp-action="Help">Help & FAQs</a>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="dropdown">
+                        <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            @User.Identity.Name
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userMenu">
+                            <li>
+                                <a class="dropdown-item text-black" asp-controller="Account" asp-action="Profile">Thông tin cá nhân</a>
+                            </li>
+                            <li>
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="m-0 p-0">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="dropdown-item text-danger">Đăng xuất</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login">Login</a>
+                }
+                <a href="#">EN</a>
+                <a href="#">VND</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="main-header">
+        <div class="container d-flex align-items-center justify-content-between">
+            <a asp-controller="Home" asp-action="TrangChu" class="logo">
+                <img src="/img/logo.png" alt="Logo" style="height:60px; box-shadow:0px 5px 10px rgba(0,0,0,0.13)">
+            </a>
+
+            <nav class="main-menu d-none d-md-block">
+                <ul class="list-unstyled d-flex gap-3 mb-0">
+                    <li><a asp-controller="Home" asp-action="TrangChu">Trang chủ</a></li>
+                    <li><a asp-controller="Product" asp-action="AllProduct">Sản phẩm</a></li>
+                    <li><a asp-controller="Home" asp-action="About">Giới thiệu</a></li>
+                    <li><a asp-controller="Home" asp-action="Contact">Liên hệ</a></li>
+                    @if (User.Identity.IsAuthenticated){
+                        if (!User.IsInRole("Khách Hàng") || User.IsInRole("")){
+                            <li><a asp-controller="Admin" asp-action="Dashboard">Dashboard</a></li>
+                        }
+                    }
+                </ul>
+            </nav>
+
+            <!-- Icons -->
+            <div class="header-icons d-flex align-items-center gap-3">
+                <a asp-controller="Cart" asp-action="MyOrders" class="icon" title="Đơn hàng của bạn">
+                    <i class="zmdi zmdi-assignment-check"></i>
+                </a>
+
+                    <a asp-controller="Cart" asp-action="Index" class="cart-wrapper">
+                    <i class="bi bi-cart3" style="font-size:24px;"></i>
+                    <span class="cart-count" id="cartCount">@ViewBag.CartCount</span>
+                </a>
+
+            </div>
+
+            <div class="mobile-btn d-md-none">
+                <i class="zmdi zmdi-menu"></i>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu d-md-none">
+            <ul class="list-unstyled">
+                <li><a asp-controller="Home" asp-action="TrangChu">Home</a></li>
+                <li><a asp-controller="Product" asp-action="AllProduct">Shop</a></li>
+                <li><a asp-controller="Blog" asp-action="Index">Blog</a></li>
+                <li><a asp-controller="Home" asp-action="About">About</a></li>
+                <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="layout-content">
+        @RenderBody()
+    </main>
+
+    <footer class="footer mt-5 pt-5 pb-4">
+    <div class="container">
+        <div class="row">
+
+            <!-- Cột 1 -->
+            <div class="col-md-3 mb-4">
+                <h5 class="footer-title">Về chúng tôi</h5>
+                <p>
+                    Shop thời trang hiện đại – nơi mang đến những sản phẩm chất lượng,
+                    xu hướng và giá tốt nhất thị trường.
+                </p>
+                <p style="font-size:13px"><i class="bi bi-geo-alt"></i> 236B Lê Văn Sỹ, Quận Tân Bình, TP Hồ Chí Minh</p>
+                <p><i class="bi bi-telephone"></i> 1900 68xx</p>
+                <p><i class="bi bi-envelope"></i> support@chauchaufashion.vn</p>
+            </div>
+
+            <!-- Cột 2 -->
+            <div class="col-md-3 mb-4">
+                <h5 class="footer-title">Chính sách</h5>
+                <ul class="footer-list">
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Chính sách bảo mật</a></li>
+                    <li><a href="#">Chính sách thanh toán</a></li>
+                    <li><a href="#">Giao hàng & vận chuyển</a></li>
+                </ul>
+            </div>
+
+            <!-- Cột 3 -->
+            <div class="col-md-3 mb-4">
+                <h5 class="footer-title">Hỗ trợ khách hàng</h5>
+                <ul class="footer-list">
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Hướng dẫn thanh toán</a></li>
+                    <li><a href="#">Trung tâm hỗ trợ</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+
+            <!-- Cột 4 -->
+            <div class="col-md-3">
+                <h5 class="footer-title">Kết nối với chúng tôi</h5>
+                <div class="social-icons">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <a href="#"><i class="bi bi-youtube"></i></a>
+                    <a href="#"><i class="bi bi-tiktok"></i></a>
+                </div>
+                <h6 class="mt-3">Đăng ký nhận tin</h6>
+                <input class="form-control mt-2" placeholder="Nhập email..." />
+                <button class="btn btn-dark w-100 mt-2">Đăng ký</button>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="text-center">
+            <p>© 2025 Châu Châu Fashion – All rights reserved.</p>
+        </div>
+    </div>
+    </div>
+</footer>
+    <!-- SCRIPTS -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="~/js/site.js"></script>
+
+    <script>
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            timeOut: 3000
+        };
+
+        // Hàm cập nhật số lượng giỏ hàng
+        function updateCartCount(count) {
+            document.getElementById("cartCount").innerText = count;
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,106 @@
+﻿@using System.Security.Claims
+@using ChauChau.Models
+@inject ChauChau.Context.ApplicationDbContext _context
+
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+
+    var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    int userId = 0;
+    if (!string.IsNullOrEmpty(userIdClaim))
+    {
+        userId = int.Parse(userIdClaim);
+    }
+
+    var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+}
+<div class="mt-3" style="margin-left:150px">
+
+    <h2>Thông tin cá nhân</h2>
+
+    @if (user == null)
+    {
+        <div class="alert alert-warning">Không tìm thấy thông tin người dùng!</div>
+    }
+    else
+    {
+        <div class="card" style="max-width:500px; padding:20px; margin-top:20px;">
+            <div class="card-body">
+                <h4 class="card-title">@user.HoTen</h4>
+                <p><strong>Email:</strong> @user.Email</p>
+                <p><strong>Số điện thoại:</strong> @user.SoDienThoai</p>
+                <p><strong>Loại tài khoản:</strong> @user.Role</p>
+                <p><strong>Ngày tạo tài khoản:</strong> @user.NgayTao.ToString("dd/MM/yyyy")</p>
+
+                <!-- Nút mở modal cập nhật thông tin -->
+                <button class="btn btn-primary mt-3 me-2" data-bs-toggle="modal" data-bs-target="#editInfoModal">Cập nhật thông tin</button>
+
+                <!-- Nút mở modal đổi mật khẩu -->
+                <button class="btn btn-warning mt-3" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Đổi mật khẩu</button>
+            </div>
+        </div>
+    }
+
+    <!-- Modal Cập nhật thông tin -->
+    <div class="modal fade" id="editInfoModal" tabindex="-1" aria-labelledby="editInfoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-controller="Account" asp-action="UpdateProfile" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editInfoModalLabel">Cập nhật thông tin</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="HoTen" class="form-label">Họ tên</label>
+                            <input type="text" class="form-control" id="HoTen" name="HoTen" value="@user.HoTen" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="SoDienThoai" class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" id="SoDienThoai" name="SoDienThoai" value="@user.SoDienThoai" required />
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Đổi mật khẩu -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-controller="Account" asp-action="ChangePassword" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changePasswordModalLabel">Đổi mật khẩu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="OldPassword" class="form-label">Mật khẩu cũ</label>
+                            <input type="password" class="form-control" id="OldPassword" name="OldPassword" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="NewPassword" class="form-label">Mật khẩu mới</label>
+                            <input type="password" class="form-control" id="NewPassword" name="NewPassword" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="ConfirmPassword" class="form-label">Xác nhận mật khẩu mới</label>
+                            <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" required />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-warning">Đổi mật khẩu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

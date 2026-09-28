@@ -1,0 +1,211 @@
+﻿@model List<ChauChau.Models.GioHang>
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+}
+
+<div style="margin-left:100px;max-width:1300px">
+    <h2 class="mb-4">Giỏ hàng của bạn</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Giỏ hàng trống!</div>
+        <a href="/Product/AllProduct" class="btn btn-primary">Tiếp tục mua sắm</a>
+    }
+    else
+    {
+        // Tính tổng tiền lớn ban đầu cho Giỏ hàng
+        var grandTotalInitial = Model.Sum(x => x.SanPhamVariant.Gia * x.SoLuong);
+
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th class="text-center">Giá</th>
+                    <th class="text-center">Số lượng</th>
+                    <th class="text-end">Tổng</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var name = item.SanPhamVariant.SanPham.TenSanPham;
+                    var price = item.SanPhamVariant.Gia;
+                    var total = price * item.SoLuong; // Tổng tiền của từng dòng
+
+                    <tr id="row-@item.GioHangId">
+                        <td>
+
+                            <a asp-controller="Product" asp-action="Details"
+                               asp-route-id="@item.SanPhamVariant.SanPhamId"
+                               asp-route-name="@name">
+                                <strong>@name</strong><br />
+                            </a>
+                            Phân loại:none
+                        </td>
+
+                        <td class="text-center">@price.ToString("N0") đ</td>
+
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <button class="btn btn-sm btn-secondary qty-minus" data-id="@item.GioHangId">-</button>
+
+                                <input type="text" class="form-control text-center mx-2 qty-input"
+                                       style="width:60px;"
+                                       value="@item.SoLuong"
+                                       data-id="@item.GioHangId" readonly />
+
+                                <button class="btn btn-sm btn-secondary qty-plus" data-id="@item.GioHangId">+</button>
+                            </div>
+                        </td>
+
+                        @* ĐIỂM SỬA QUAN TRỌNG: Thêm data-value để JS có thể tính tổng *@
+                        <td class="text-end fw-bold total-price"
+                            id="total-@item.GioHangId"
+                            data-value="@total">
+                            @total.ToString("N0") đ
+                        </td>
+
+                        <td class="text-end">
+                            <button class="btn btn-danger btn-sm delete-item" data-id="@item.GioHangId">
+                                Xóa
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="text-end mt-4">
+            <h4 class="fw-bold">
+                Tổng thanh toán:
+                <span id="grandTotal" data-value="@grandTotalInitial">
+                    @grandTotalInitial.ToString("N0") đ
+                </span>
+            </h4>
+
+            <a asp-controller="CheckOut" asp-action="Index" class="btn btn-primary btn-lg mt-3">Thanh toán</a>
+        </div>
+    }
+
+</div>
+@section Scripts {
+    <script>
+
+        // Hàm này sẽ tính tổng dựa trên thuộc tính data-value của tất cả các dòng
+        function updateTotals() {
+            let grand = 0;
+
+            $(".total-price").each(function () {
+                // Lấy giá trị data-value (là một số)
+                grand += parseInt($(this).data("value")) || 0;
+            });
+
+            // Cập nhật tổng tiền lớn và data-value của tổng tiền
+            $("#grandTotal")
+                .text(grand.toLocaleString("vi-VN") + " đ")
+                .data("value", grand);
+
+            // Nếu giỏ hàng trống, hiển thị thông báo trống (Kiểm tra xem còn dòng nào không)
+            if ($('tr[id^="row-"]').length === 0) {
+                 // Dùng AJAX để tải lại partial view hoặc đơn giản là thông báo trống (nếu cần)
+                 window.location.reload(); // Tải lại trang để cập nhật giao diện "Giỏ hàng trống"
+            }
+        }
+
+        // Tăng số lượng
+        $(document).on("click", ".qty-plus", function () {
+            let id = $(this).data("id");
+            // console.log("Tăng ID:", id);
+
+            $.post("/Cart/Increase", { id }, function (res) {
+                if (res.success) {
+                    let newQty = res.quantity;
+                    let newTotal = res.total; // Tổng tiền mới của dòng này (cần là dạng số)
+
+                    $(`.qty-input[data-id=${id}]`).val(newQty);
+
+                    $(`#total-${id}`)
+                        .text(newTotal.toLocaleString("vi-VN") + " đ")
+                        // Cập nhật data-value để hàm updateTotals() hoạt động
+                        .data("value", newTotal);
+
+                    updateTotals();
+                } else {
+                    alert("Cập nhật thất bại hoặc số lượng đã đạt tối đa.");
+                }
+            }).fail(function() {
+                alert("Lỗi kết nối máy chủ khi tăng số lượng.");
+            });
+        });
+
+
+        // Giảm số lượng
+        $(document).on("click", ".qty-minus", function () {
+            let id = $(this).data("id");
+            // console.log("Giảm ID:", id);
+
+            $.post("/Cart/Decrease", { id }, function (res) {
+
+                if (res.remove) {
+                    $(`#row-${id}`).remove();
+                    updateTotals();
+
+                    // Kiểm tra xem giỏ hàng có trống không sau khi xóa
+                    if ($('tr[id^="row-"]').length === 0) {
+                        window.location.reload();
+                    }
+                    return;
+                }
+
+                if (res.success) {
+                    let newQty = res.quantity;
+                    let newTotal = res.total; // Tổng tiền mới của dòng này (cần là dạng số)
+
+                    $(`.qty-input[data-id=${id}]`).val(newQty);
+
+                    $(`#total-${id}`)
+                        .text(newTotal.toLocaleString("vi-VN") + " đ")
+                        // Cập nhật data-value để hàm updateTotals() hoạt động
+                        .data("value", newTotal);
+
+                    updateTotals();
+                } else {
+                    alert("Cập nhật thất bại hoặc số lượng đã đạt tối thiểu.");
+                }
+            }).fail(function() {
+                alert("Lỗi kết nối máy chủ khi giảm số lượng.");
+            });
+        });
+
+
+        // Xóa sản phẩm
+        $(document).on("click", ".delete-item", function () {
+            if (!confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?")) {
+                return;
+            }
+
+            let id = $(this).data("id");
+            // console.log("Xóa ID:", id);
+
+            $.post("/Cart/Delete", { id }, function (res) {
+                if (res.success) {
+                    $(`#row-${id}`).remove();
+                    updateTotals();
+
+                    // Kiểm tra xem giỏ hàng có trống không sau khi xóa
+                    if ($('tr[id^="row-"]').length === 0) {
+                        window.location.reload();
+                    }
+                } else {
+                    alert("Xóa sản phẩm thất bại.");
+                }
+            }).fail(function() {
+                alert("Lỗi kết nối máy chủ khi xóa sản phẩm.");
+            });
+        });
+
+    </script>
+}

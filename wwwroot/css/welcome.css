@@ -1,0 +1,121 @@
+﻿/* ====================== BỐ CỤC TRANG 2 LỀ ====================== */
+.page-wrapper {
+    display: flex;
+    min-height: calc(100vh - 80px); /* đảm bảo kéo xuống chạm footer */
+}
+
+.side-bg {
+    width: 12%;
+    background: #f0f0f0; /* màu lề trái/phải */
+}
+
+.content-area {
+    width: 76%;
+    background: #fff;
+    padding: 20px 40px;
+}
+
+
+/* ====================== CAROUSEL ====================== */
+.carousel-item img {
+    height: 450px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.banner-dark {
+    position: relative;
+}
+
+    .banner-dark::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.15);
+        border-radius: 12px;
+    }
+
+.banner-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+}
+
+    .banner-text h1 {
+        text-shadow: 0 4px 10px black;
+        font-size: 48px;
+        font-weight: 700;
+    }
+
+
+/* ====================== SECTION ====================== */
+.section {
+    margin-top: 50px;
+    padding: 20px;
+    border-radius: 10px;
+
+}
+.layout-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #222;
+}
+
+/* ====================== FLASH SALE ====================== */
+.sale-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    transition: 0.3s;
+}
+
+    .sale-card:hover {
+        transform: translateY(-6px);
+    }
+
+.sale-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ff3c2a;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.countdown-timer {
+    font-size: 20px;
+    font-weight: bold;
+    background: #000;
+    color: #ffd500;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+
+/* ====================== BEST SELLER ====================== */
+.best-card {
+    border-radius: 14px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+    .best-card img {
+        height: 220px;
+        object-fit: cover;
+    }
+
+    .best-card:hover {
+        transform: scale(1.03);
+    }
+
+
+/* ====================== NEW COLLECTION ====================== */
+.new-collection img {
+    border-radius: 20px;
+}

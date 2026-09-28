@@ -1,0 +1,108 @@
+﻿body {
+    background: #f5f7fa;
+    font-family: "Inter", sans-serif;
+}
+
+/* Layout */
+.checkout-wrapper {
+
+    margin: auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 25px;
+}
+
+/* Card */
+.card-box {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.box-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* Form */
+.form-group label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    height: 42px;
+    border-radius: 8px;
+}
+
+/* Table */
+.cart-table th {
+    background: #f1f4f9;
+    font-weight: 600;
+}
+
+.cart-table td, th {
+    vertical-align: middle;
+}
+
+/* Payment summary */
+.payment-box .total-amount {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.price {
+    font-weight: 700;
+    color: #d9534f;
+}
+
+/* Buttons */
+.btn-pay {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    border: none;
+    color: white;
+    font-weight: 600;
+}
+
+.btn-cod {
+    background: #28a745;
+}
+
+    .btn-cod:hover {
+        background: #1e7e34;
+    }
+
+.btn-vnpay {
+    background: #0066cc;
+}
+
+    .btn-vnpay:hover {
+        background: #004c99;
+    }
+
+.btn-momo {
+    background: #d82d8b;
+}
+
+    .btn-momo:hover {
+        background: #b61f74;
+    }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .checkout-wrapper {
+        grid-template-columns: 1fr;
+    }
+}

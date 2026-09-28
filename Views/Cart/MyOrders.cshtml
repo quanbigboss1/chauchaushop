@@ -1,0 +1,166 @@
+﻿@model List<ChauChau.Models.DonHang>
+
+<div style="max-width:1300px;margin-left:110px" class="mt-4">
+    <h2 class="page-title">Đơn hàng của tôi</h2>
+
+    @if (!Model.Any())
+    {
+        <p class="empty-cart">Bạn chưa có đơn hàng nào.</p>
+    }
+    else
+    {
+        <div class="orders-container">
+            @foreach (var don in Model)
+            {
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-id">Mã đơn: <strong>@don.DonHangId</strong></div>
+                        <div class="order-date">@don.NgayDat.ToString("dd/MM/yyyy")</div>
+
+                        @if (don.TrangThai == "DaThanhToan")
+                        {
+                            <div class="order-status text-success fw-bold">Đã thanh toán</div>
+                        }
+                    </div>
+
+                    <div class="order-items">
+                        @foreach (var ct in don.ChiTietDonHangs ?? new List<ChauChau.Models.ChiTietDonHang>())
+                        {
+                            var variant = ct.SanPhamVariant;
+                            var sanPham = variant?.SanPham;
+                            var hinh = variant?.HinhAnhs?.FirstOrDefault()?.HinhAnh ?? "/img/default.png";
+                            var ten = sanPham?.TenSanPham ?? "Sản phẩm không tồn tại";
+                            var gia = variant?.Gia ?? 0;
+
+                            <div class="order-item">
+                                <div class="item-image">
+                                    <img src="@hinh" alt="@ten" />
+                                </div>
+
+                                <div class="item-info">
+                                    <div class="item-name">@ten</div>
+                                    <div class="item-quantity">
+                                        @ct.SoLuong x @gia.ToString("N0") ₫
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+
+                    <div class="order-footer">
+                        <div class="order-total">Tổng: <strong>@don.TongTien.ToString("N0") ₫</strong></div>
+                        <a href="@Url.Action("Details", "DonHang", new { id = don.DonHangId })" class="btn-view">Xem chi tiết</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .orders-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .order-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 15px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: transform 0.2s;
+    }
+
+        .order-card:hover {
+            transform: translateY(-2px);
+        }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+    }
+
+    .order-id, .order-date {
+        font-size: 14px;
+        color: #555;
+    }
+
+    .order-status {
+        font-weight: 600;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        text-transform: capitalize;
+    }
+
+    .order-items {
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+        padding: 10px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .order-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .item-image img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+
+    .item-info {
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .item-name {
+        font-weight: 500;
+    }
+
+    .item-quantity {
+        color: #555;
+    }
+
+    .order-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .order-total {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .btn-view {
+        background-color: #ee4d2d;
+        color: #fff;
+        padding: 6px 15px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background 0.2s;
+    }
+
+        .btn-view:hover {
+            background-color: #d9431e;
+        }
+</style>

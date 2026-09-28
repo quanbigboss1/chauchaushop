@@ -1,0 +1,146 @@
+﻿@{
+    ViewData["Title"] = "Giới thiệu";
+}
+
+<style>
+    .about-container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 35px;
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid #eaeaea;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .about-title {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #222;
+    }
+
+    .about-section-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin-top: 35px;
+        margin-bottom: 15px;
+        color: #222;
+    }
+
+    .about-text {
+        font-size: 17px;
+        line-height: 1.9;
+        color: #444;
+        margin-bottom: 18px;
+        text-align: justify;
+    }
+
+    .highlight-box {
+        background: #f7f7f7;
+        padding: 20px;
+        border-left: 4px solid #e63946;
+        border-radius: 8px;
+        margin: 25px 0;
+    }
+
+        .highlight-box p {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+    .strengths-list,
+    .tech-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+        .strengths-list li,
+        .tech-list li {
+            margin-bottom: 12px;
+            font-size: 16px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+            .strengths-list li i,
+            .tech-list li i {
+                font-size: 20px;
+                margin-right: 10px;
+                margin-top: 2px;
+                color: #e63946;
+            }
+</style>
+
+<div class="about-container">
+
+    <h2 class="about-title">Giới thiệu về Châu Châu Fashion</h2>
+
+    <p class="about-text">
+        <strong>Châu Châu Fashion</strong> là thương hiệu thời trang được xây dựng với mong muốn mang đến cho khách hàng
+        những trang phục đẹp, chất lượng và phù hợp với phong cách sống hiện đại. Chúng tôi hướng tới việc kết hợp giữa
+        thiết kế trẻ trung, chất liệu cao cấp và trải nghiệm mua sắm thân thiện, nhanh chóng và an toàn.
+    </p>
+
+    <p class="about-text">
+        Không chỉ là một cửa hàng thời trang, Châu Châu Fashion còn phát triển mạnh mẽ trên nền tảng online nhằm giúp khách
+        hàng dễ dàng tiếp cận sản phẩm mọi lúc – mọi nơi. Website bán hàng của chúng tôi được đầu tư kỹ lưỡng về giao diện,
+        tốc độ và bảo mật, giúp người dùng có trải nghiệm mua sắm mượt mà và tiện lợi.
+    </p>
+
+    <!-- ======================= SHOP INTRO ======================== -->
+    <h3 class="about-section-title">Về Website Bán Hàng Châu Châu Fashion</h3>
+
+    <p class="about-text">
+        Hệ thống website bán hàng được xây dựng nhằm hỗ trợ khách hàng tìm kiếm và mua sắm quần áo một cách nhanh chóng,
+        tiện lợi và minh bạch. Tại đây, khách hàng có thể xem sản phẩm chi tiết, chọn kích cỡ, màu sắc, thêm vào giỏ hàng,
+        thanh toán trực tuyến.
+    </p>
+
+    <ul class="strengths-list">
+        <li><i class="zmdi zmdi-check-circle"></i> Giao diện thân thiện, dễ sử dụng phù hợp</li>
+        <li><i class="zmdi zmdi-check-circle"></i> Tìm kiếm và lọc sản phẩm chính xác, hiển thị rõ ràng.</li>
+        <li><i class="zmdi zmdi-check-circle"></i> Hệ thống quản lý đơn hàng, tài khoản người dùng đầy đủ.</li>
+        <li><i class="zmdi zmdi-check-circle"></i> Bảo mật tốt và tuân thủ tiêu chuẩn thanh toán VNPay.</li>
+    </ul>
+
+
+    <!-- ======================= TECH ======================== -->
+    <h3 class="about-section-title">Công nghệ sử dụng để xây dựng Website</h3>
+
+    <p class="about-text">
+        Nền tảng web được xây dựng dựa trên công nghệ hiện đại, đem đến độ ổn định cao và khả năng mở rộng lâu dài.
+    </p>
+
+    <ul class="tech-list">
+        <li><i class="zmdi zmdi-code"></i> <strong>ASP.NET MVC / ASP.NET Core</strong> – Xây dựng toàn bộ hệ thống Web.</li>
+        <li><i class="zmdi zmdi-storage"></i> <strong>SQL Server</strong> – Quản lý dữ liệu sản phẩm, đơn hàng, tài khoản.</li>
+        <li><i class="zmdi zmdi-shopping-cart"></i> <strong>Giỏ hàng với session & database</strong> – Lưu trữ giỏ hàng ổn định.</li>
+        <li><i class="zmdi zmdi-view-web"></i> <strong>Bootstrap + CSS</strong> – Xây dựng UI đẹp, dễ dùng.</li>
+    </ul>
+
+
+    <!-- ======================= PAYMENT ======================== -->
+    <h3 class="about-section-title">Tích hợp thanh toán VNPay</h3>
+
+    <p class="about-text">
+        Để nâng cao sự tiện lợi cho khách hàng, website Châu Châu Fashion đã tích hợp cổng thanh toán <strong>VNPay</strong>.
+        Khách hàng có thể thanh toán nhanh chóng bằng thẻ ngân hàng nội địa, QR Pay hoặc ví VNPay.
+    </p>
+
+    <ul class="strengths-list">
+        <li><i class="zmdi zmdi-check-circle"></i> Thanh toán an toàn, bảo mật cao.</li>
+        <li><i class="zmdi zmdi-check-circle"></i> Xử lý đơn hàng tự động sau khi thanh toán thành công.</li>
+        <li><i class="zmdi zmdi-check-circle"></i> Gửi email xác nhận đơn hàng.</li>
+        <li><i class="zmdi zmdi-check-circle"></i> Ghi log giao dịch, lưu thông tin vào SQL Server.</li>
+    </ul>
+    <div class="highlight-box">
+        <p>
+            ❤️ Châu Châu Fashion cam kết mang đến sản phẩm đẹp – chất lượng – giá tốt và trở thành lựa chọn hàng đầu của bạn trong lĩnh vực thời trang.
+        </p>
+    </div>
+
+</div>

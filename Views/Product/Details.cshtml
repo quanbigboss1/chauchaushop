@@ -1,0 +1,233 @@
+﻿@model ChauChau.Models.SanPham
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+}
+
+<link href="~/css/product-details.css" rel="stylesheet" />
+
+<div class="container mt-4 product-detail">
+
+    <div class="row">
+
+        <!-- HÌNH ẢNH -->
+        <div class="col-md-6">
+            <div class="product-gallery d-flex">
+
+                <div class="thumbnail-list me-3" id="thumbnailList">
+                    @* hiển thị tất cả hình ảnh của tất cả variant *@
+                    @foreach (var v in Model.Variants)
+                    {
+                        if (v.HinhAnhs != null)
+                        {
+                            foreach (var img in v.HinhAnhs)
+                            {
+                                <img src="@img.HinhAnh" class="thumbnail-img mb-2" />
+                            }
+                        }
+                    }
+                </div>
+
+                <div class="main-image-wrapper">
+                    <img id="mainImage"
+                         src="@Model.Variants.First().HinhAnhs?.FirstOrDefault()?.HinhAnh"
+                         class="main-image img-fluid" />
+                </div>
+            </div>
+        </div>
+
+        <!-- THÔNG TIN -->
+        <div class="col-md-6">
+            <h2 class="product-name">@Model.TenSanPham</h2>
+            <p class="product-price">@String.Format("{0:N0}", Model.Variants.First().Gia) VND</p>
+
+            <!-- CHỌN MÀU -->
+            <div class="option-block">
+                <label><strong>Màu sắc</strong></label>
+                <div class="color-options d-flex" id="colorOptions">
+                    @foreach (var group in Model.Variants.GroupBy(v => v.MauSac))
+                    {
+                        bool hetHang = group.Sum(v => v.SoLuong) == 0;
+                        <div class="color-circle @(hetHang ? "disabled-color" : "")"
+                             data-color="@group.Key"
+                             title="@group.Key"></div>
+                    }
+                </div>
+                <p id="colorInfo" class="mt-2 text-muted"></p>
+            </div>
+
+            <!-- CHỌN SIZE -->
+            <div class="option-block mt-3">
+                <label><strong>Kích cỡ</strong></label>
+                <div id="sizeContainer" class="size-options d-flex">
+                    @foreach (var size in new[] { "S", "M", "L", "XL" })
+                    {
+                        var variantsOfSize = Model.Variants.Where(v => v.KichCo == size);
+                        bool hetHang = !variantsOfSize.Any() || variantsOfSize.Sum(v => v.SoLuong) == 0;
+                        <div class="size-box @(hetHang ? "disabled-size" : "")" data-size="@size">@size</div>
+                    }
+                </div>
+                <p id="stockInfo" class="mt-2 text-muted"></p>
+            </div>
+
+            <!-- SỐ LƯỢNG -->
+            <div class="mt-3">
+                <label><strong>Số lượng</strong></label>
+                <input type="number" id="quantity" class="form-control w-25" min="1" value="1" />
+            </div>
+
+            <!-- NÚT -->
+            <div class="mt-4 d-flex">
+                <button type="button" id="addToCartBtn" class="btn btn-dark me-2">THÊM VÀO GIỎ</button>
+                <button class="btn btn-danger">MUA NGAY</button>
+            </div>
+
+            @* Render hidden anti-forgery token (form field) để JS lấy *@
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+</div>
+
+<script>
+    // CHUẨN BỊ DỮ LIỆU VARIANTS (chỉ lấy thuộc tính cần thiết)
+    const variants = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(
+        Model.Variants.Select(v => new
+        {
+            id = v.SanPhamVariantId,
+            mauSac = (v.MauSac ?? "").Trim(),
+            kichCo = v.KichCo,
+            soLuong = v.SoLuong,
+            gia = v.Gia,
+            hinhAnhs = v.HinhAnhs != null ? v.HinhAnhs.Select(x => x.HinhAnh).ToList() : new List<string>()
+        })
+    ));
+
+    // THUMBNAILS
+    function attachThumbnailEvent() {
+        document.querySelectorAll(".thumbnail-img").forEach(img => {
+            img.addEventListener("click", () => {
+                document.getElementById("mainImage").src = img.src;
+            });
+        });
+    }
+    attachThumbnailEvent();
+
+    // CHỌN MÀU
+    document.querySelectorAll("#colorOptions .color-circle").forEach(c => {
+        c.addEventListener("click", () => {
+            if (c.classList.contains("disabled-color")) return;
+            document.querySelectorAll("#colorOptions .color-circle").forEach(x => x.classList.remove("selected"));
+            c.classList.add("selected");
+
+            const color = c.dataset.color.trim();
+            document.getElementById("colorInfo").innerText = "Đã chọn màu: " + color;
+
+            updateSizesByColor(color);
+            updateImagesByColor(color);
+            document.getElementById("stockInfo").innerText = "";
+        });
+    });
+
+    // CẬP NHẬT SIZE KHI CHỌN MÀU
+    function updateSizesByColor(color) {
+        document.querySelectorAll(".size-box").forEach(box => {
+            const size = box.dataset.size;
+            const variant = variants.find(v => v.mauSac === color && v.kichCo === size);
+            if (!variant || variant.soLuong <= 0) {
+                box.classList.add("disabled-size");
+                box.classList.remove("selected");
+            } else {
+                box.classList.remove("disabled-size");
+            }
+        });
+    }
+
+    // CẬP NHẬT ẢNH KHI CHỌN MÀU
+    function updateImagesByColor(color) {
+        const imgs = variants.filter(v => v.mauSac === color).flatMap(v => v.hinhAnhs);
+        if (imgs.length > 0) {
+            document.getElementById("mainImage").src = imgs[0];
+            let html = "";
+            imgs.forEach(i => html += `<img src="${i}" class="thumbnail-img mb-2"/>`);
+            document.getElementById("thumbnailList").innerHTML = html;
+            attachThumbnailEvent();
+        }
+    }
+
+    // CHỌN SIZE
+    document.querySelectorAll(".size-box").forEach(box => {
+        box.addEventListener("click", () => {
+            if (box.classList.contains("disabled-size")) return;
+
+            const color = document.querySelector("#colorOptions .color-circle.selected")?.dataset.color?.trim();
+            if (!color) return alert("Vui lòng chọn màu!");
+
+            document.querySelectorAll(".size-box").forEach(x => x.classList.remove("selected"));
+            box.classList.add("selected");
+
+            const size = box.dataset.size;
+            const variant = variants.find(v => v.mauSac === color && v.kichCo === size);
+
+            document.getElementById("stockInfo").innerText =
+                "Số lượng còn lại: " + (variant?.soLuong ?? 0);
+        });
+    });
+
+    // TOKEN
+    function getRequestVerificationToken() {
+        const tokenInput = document.querySelector("input[name='__RequestVerificationToken']");
+        return tokenInput ? tokenInput.value : "";
+    }
+
+    // ==============================
+    // 🔥 KIỂM TRA TỒN KHO KHI THÊM GIỎ
+    // ==============================
+    document.getElementById("addToCartBtn").addEventListener("click", () => {
+
+        const color = document.querySelector("#colorOptions .color-circle.selected")?.dataset.color?.trim();
+        const size = document.querySelector(".size-box.selected")?.dataset.size;
+        const quantity = parseInt(document.getElementById("quantity").value) || 1;
+
+        if (!color) return alert("Vui lòng chọn màu!");
+        if (!size) return alert("Vui lòng chọn kích cỡ!");
+
+        const variant = variants.find(v => v.mauSac === color && v.kichCo === size);
+        if (!variant) return alert("Không tìm thấy sản phẩm tương ứng!");
+
+        // 🔥 KIỂM TRA SỐ LƯỢNG TRƯỚC KHI GỬI LÊN SERVER
+        if (quantity > variant.soLuong) {
+            alert(`Không thể thêm ${quantity} sản phẩm! Chỉ còn ${variant.soLuong} sản phẩm trong kho.`);
+            return; // ❌ NGĂN FETCH -> KHÔNG THÊM VÀO GIỎ
+        }
+
+        // TIẾP TỤC GỬI LÊN SERVER
+        const formData = new FormData();
+        formData.append("VariantId", variant.id);
+        formData.append("Quantity", quantity);
+        formData.append("__RequestVerificationToken", getRequestVerificationToken());
+
+        fetch("/Cart/Add", {
+            method: "POST",
+            body: formData
+        })
+        .then(async res => {
+            if (!res.ok) {
+                const text = await res.text();
+                console.error("Server returned error:", text);
+                alert("Lỗi server! Không thể thêm vào giỏ.");
+                throw new Error("Server error");
+            }
+            return res.json();
+        })
+        .then(data => {
+            if (data.success) {
+                const cartIcon = document.querySelector(".cart-icon");
+                if (cartIcon) cartIcon.setAttribute("data-count", data.cartCount);
+                alert("Đã thêm vào giỏ!");
+            } else {
+                alert(data.message || "Thêm giỏ thất bại");
+            }
+        })
+        .catch(err => console.error(err));
+    });
+</script>
+

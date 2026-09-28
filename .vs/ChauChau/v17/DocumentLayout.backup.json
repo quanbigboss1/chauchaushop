@@ -1,0 +1,177 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\hongh\\Desktop\\ChauChau\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|c:\\users\\hongh\\desktop\\chauchau\\controllers\\testcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|solutionrelative:controllers\\testcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|c:\\users\\hongh\\desktop\\chauchau\\helpers\\vnpayconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|solutionrelative:helpers\\vnpayconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|c:\\users\\hongh\\desktop\\chauchau\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|c:\\users\\hongh\\desktop\\chauchau\\chauchau.csproj.backup.tmp||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|solutionrelative:chauchau.csproj.backup.tmp||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|c:\\users\\hongh\\desktop\\chauchau\\chauchau.csproj.backup (1).tmp||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|solutionrelative:chauchau.csproj.backup (1).tmp||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|c:\\users\\hongh\\desktop\\chauchau\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|c:\\users\\hongh\\desktop\\chauchau\\views\\checkout\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|solutionrelative:views\\checkout\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|c:\\users\\hongh\\desktop\\chauchau\\service\\vnpaylibrary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|solutionrelative:service\\vnpaylibrary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|c:\\users\\hongh\\desktop\\chauchau\\service\\vnpayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8DD81F44-1404-4C4B-BBA5-53BB7D24597B}|ChauChau.csproj|solutionrelative:service\\vnpayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "VNPayConfig.cs",
+              "DocumentMoniker": "C:\\Users\\hongh\\Desktop\\ChauChau\\Helpers\\VNPayConfig.cs",
+              "RelativeDocumentMoniker": "Helpers\\VNPayConfig.cs",
+              "ToolTip": "C:\\Users\\hongh\\Desktop\\ChauChau\\Helpers\\VNPayConfig.cs",
+              "RelativeToolTip": "Helpers\\VNPayConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-27T04:25:04.182Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\hongh\\Desktop\\ChauChau\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\hongh\\Desktop\\ChauChau\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-27T04:23:40.255Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ChauChau.csproj.Backup.tmp",
+              "DocumentMoniker": "C:\\Users\\hongh\\Desktop\\ChauChau\\ChauChau.csproj.Backup.tmp",
+              "RelativeDocumentMoniker": "ChauChau.csproj.Backup.tmp",
+              "ToolTip": "C:\\Users\\hongh\\Desktop\\ChauChau\\ChauChau.csproj.Backup.tmp",
+              "RelativeToolTip": "ChauChau.csproj.Backup.tmp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-09-27T04:23:39.062Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ChauChau.csproj.Backup (1).tmp",
+              "DocumentMoniker": "C:\\Users\\hongh\\Desktop\\ChauChau\\ChauChau.csproj.Backup (1).tmp",
+              "RelativeDocumentMoniker": "ChauChau.csproj.Backup (1).tmp",
+              "ToolTip": "C:\\Users\\hongh\\Desktop\\ChauChau\\ChauChau.csproj.Backup (1).tmp",
+              "RelativeToolTip": "ChauChau.csproj.Backup (1).tmp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-09-27T04:23:36.252Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\hongh\\Desktop\\ChauChau\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\hongh\\Desktop\\ChauChau\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-27T04:23:04.694Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TestController.cs",
+              "DocumentMoniker": "C:\\Users\\hongh\\Desktop\\ChauChau\\Controllers\\TestController.cs",
+              "RelativeDocumentMoniker": "Controllers\\TestController.cs",
+              "ToolTip": "C:\\Users\\hongh\\Desktop\\ChauChau\\Controllers\\TestController.cs",
+              "RelativeToolTip": "Controllers\\TestController.cs",
+              "ViewState": "AgIAAKQAAAAAAAAAAAAkwIwAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-27T04:19:27.201Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\hongh\\Desktop\\ChauChau\\Views\\Checkout\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Checkout\\Index.cshtml",
+              "ToolTip": "C:\\Users\\hongh\\Desktop\\ChauChau\\Views\\Checkout\\Index.cshtml",
+              "RelativeToolTip": "Views\\Checkout\\Index.cshtml",
+              "ViewState": "AgIAAFsAAAAAAAAAAIAwwGAAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-27T04:19:13.195Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "VnPayLibrary.cs",
+              "DocumentMoniker": "C:\\Users\\hongh\\Desktop\\ChauChau\\Service\\VnPayLibrary.cs",
+              "RelativeDocumentMoniker": "Service\\VnPayLibrary.cs",
+              "ToolTip": "C:\\Users\\hongh\\Desktop\\ChauChau\\Service\\VnPayLibrary.cs",
+              "RelativeToolTip": "Service\\VnPayLibrary.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAqwBYAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-27T04:16:06.645Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "VNPayService.cs",
+              "DocumentMoniker": "C:\\Users\\hongh\\Desktop\\ChauChau\\Service\\VNPayService.cs",
+              "RelativeDocumentMoniker": "Service\\VNPayService.cs",
+              "ToolTip": "C:\\Users\\hongh\\Desktop\\ChauChau\\Service\\VNPayService.cs",
+              "RelativeToolTip": "Service\\VNPayService.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAowC0AAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-27T04:10:45.159Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

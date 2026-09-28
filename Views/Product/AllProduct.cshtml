@@ -1,0 +1,210 @@
+﻿@model List<ChauChau.Models.SanPham>
+
+@{
+    ViewData["Title"] = "Sản phẩm";
+    int? selectedCategory = ViewBag.SelectedCategory;
+    var categories = ViewBag.Categories as List<ChauChau.Models.DanhMuc>;
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/product.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <style>
+        .label-title {
+            font-weight: bold;
+            font-size: 17px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+
+        .product-tabs li {
+            cursor: pointer;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+
+            .product-tabs li.active {
+                border-color: black;
+                color: black !important;
+            }
+
+            .product-tabs li:hover {
+                background: #f3f3f3;
+            }
+
+        .price-inputs {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-field {
+            display: flex;
+            align-items: center;
+            border: 1px solid #cfcfcf;
+            padding: 8px 12px;
+            border-radius: 5px;
+            background: #fff;
+            width: 100%;
+        }
+
+            .price-field span {
+                margin-right: 6px;
+                color: #555;
+                font-weight: bold;
+            }
+
+            .price-field input {
+                border: none;
+                outline: none;
+                width: 100%;
+            }
+
+        .divider {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .btn-group-price {
+            display: flex;
+            margin-top: 12px;
+        }
+
+        .btn-apply {
+            background: black;
+            color: white;
+            border: none;
+            margin-top: -10px;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<div class="product-header container mt-3">
+    <h2 class="text-black">SẢN PHẨM</h2>
+    <div class="d-flex justify-content-between">
+
+        <!-- CATEGORY FILTER -->
+        <div class="product-top-bar d-flex align-items-center">
+            <ul class="product-tabs d-flex gap-3">
+
+                <!-- TẤT CẢ -->
+                <li class="@(selectedCategory == null ? "active" : "")"
+                    onclick="filterCategory(null)">
+                    Tất cả sản phẩm
+                </li>
+
+                <!-- DANH MỤC TỪ DATABASE -->
+                @if (categories != null)
+                {
+                    foreach (var dm in categories)
+                    {
+                        <li class="@(selectedCategory == dm.DanhMucId ? "active" : "")"
+                            onclick="filterCategory(@dm.DanhMucId)">
+                            @dm.TenDanhMuc
+                        </li>
+                    }
+                }
+
+            </ul>
+        </div>
+
+        <!-- PRICE FILTER -->
+        <div>
+            <label class="label-title">Khoảng giá</label>
+
+            <form method="get" asp-action="AllProduct" class="price-form d-flex">
+
+                <input type="hidden" name="categoryId" value="@selectedCategory" />
+
+                <div class="price-inputs">
+                    <div class="price-field">
+                        <span>₫</span>
+                        <input type="number" name="minPrice" placeholder="Từ" value="@ViewBag.MinPrice">
+                    </div>
+
+                    <span class="divider">-</span>
+
+                    <div class="price-field">
+                        <span>₫</span>
+                        <input type="number" name="maxPrice" placeholder="Đến" value="@ViewBag.MaxPrice">
+                    </div>
+                </div>
+
+                <div class="btn-group-price ms-4">
+                    <button class="btn-apply" type="submit">ÁP DỤNG</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<!-- PRODUCT GRID -->
+<div class="container mt-4">
+    <div class="row g-4">
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="text-center mt-5">
+                <h4>Không có sản phẩm nào phù hợp.</h4>
+            </div>
+        }
+        else
+        {
+            foreach (var sp in Model)
+            {
+                var firstVariant = sp.Variants.FirstOrDefault();
+                var imageUrl = firstVariant?.HinhAnhs.FirstOrDefault()?.HinhAnh ?? "/img/default.png";
+                var price = firstVariant?.Gia.ToString("N0") ?? "Liên hệ";
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="product-card">
+                        <img src="@imageUrl" class="product-img" />
+
+                        <div class="product-info" style="min-height:105px">
+                            <a asp-controller="Product" asp-action="Details"
+                               asp-route-id="@sp.SanPhamId"
+                               asp-route-name="@Uri.EscapeDataString(sp.TenSanPham)">
+                                @sp.TenSanPham
+                            </a>
+
+                            <div class="product-bottom d-flex justify-content-between align-items-center">
+                                <span class="product-price">@price VND</span>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    function filterCategory(categoryId) {
+        const minPrice = $("input[name='minPrice']").val();
+        const maxPrice = $("input[name='maxPrice']").val();
+
+        window.location.href =
+            `/Product/AllProduct?categoryId=${categoryId ?? ""}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+    }
+</script>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        toastr.success("@TempData["SuccessMessage"]");
+    </script>
+}

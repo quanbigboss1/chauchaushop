@@ -1,0 +1,722 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+    
+
+<style>
+    .admin-wrapper {
+        padding: 20px;
+    }
+
+    /* Header bình thường */
+    .main-header {
+        position: initial; /* hoặc fixed nếu muốn luôn hiện ở top */
+        top: 0; /* vị trí cách top 0px */
+        z-index: 100; /* đảm bảo nằm trên nội dung khác */
+        background-color: #f5f5f7; /* nền header */
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* optional: bóng nhẹ */
+    }
+
+
+
+        .main-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+    .header-actions .btn {
+        padding: 8px 16px;
+        font-size: 14px;
+        border-radius: 6px;
+        font-weight: 500;
+        margin-left: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .btn-main {
+        background-color: #ee4d2d;
+        color: #fff;
+        border: none;
+    }
+
+        .btn-main:hover {
+            background-color: #d9431e;
+        }
+
+    .btn-secondary {
+        background-color: #f3f4f6;
+        color: #333;
+        border: 1px solid #ddd;
+    }
+
+        .btn-secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+    .stats-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .card.stat {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .card.stat:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .card.stat p {
+            font-size: 14px;
+            color: #777;
+            margin: 0 0 5px 0;
+        }
+
+        .card.stat h3, .card.stat span {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111;
+        }
+
+        .card.stat.highlight {
+            background-color: #fef3f2;
+            border: 1px solid #fcd5d0;
+        }
+
+            .card.stat.highlight p {
+                color: #555;
+            }
+
+            .card.stat.highlight span {
+                font-size: 18px;
+                color: #ee4d2d;
+            }
+
+    .chart-section {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        margin-bottom: 30px;
+    }
+
+    canvas {
+        width: 100% !important;
+        max-height: 300px;
+    }
+
+    .view-all-container {
+        text-align: right;
+        margin-top: 15px;
+    }
+
+    .btn-view-all {
+        display: inline-block;
+        padding: 8px 20px;
+        background-color: #ee4d2d;
+        color: #fff;
+        font-weight: 600;
+        font-size: 14px;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .btn-view-all:hover {
+            background-color: #d9431e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+</style>
+
+<div class="admin-wrapper" style="max-width:1220px;margin-left:150px">
+    <main class="main">
+
+        <!-- Header -->
+        <div class="main-header" style="background-color:white;border-radius:20px">
+            <h2>Dashboard</h2>
+            <div class="header-actions">
+                <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#themSanPhamModal">
+                    + Thêm sản phẩm
+                </button>
+                <!-- Nút thêm danh mục -->
+                <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#themDanhMucModal">
+                    + Thêm danh mục
+                </button>
+
+                <!-- Modal Thêm danh mục -->
+                <div class="modal fade" id="themDanhMucModal" tabindex="-1" aria-labelledby="themDanhMucModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <!-- Header modal -->
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="themDanhMucModalLabel">Thêm danh mục mới</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <!-- Body modal -->
+                            <div class="modal-body">
+                                <form asp-action="Create" asp-controller="DanhMuc" method="post">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tên danh mục</label>
+                                        <input type="text" name="TenDanhMuc" class="form-control" required />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Mô tả</label>
+                                        <textarea name="MoTa" class="form-control" rows="3"></textarea>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-main">Thêm danh mục</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+               @*  <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#nhapKhoModal">
+                    Nhập kho
+                </button> *@
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <section class="stats-cards mt-4">
+            <div class="card stat">
+                <p>Người dùng</p>
+                <h3>@ViewBag.TotalUsers</h3>
+            </div>
+
+            <div class="card stat">
+                <p>Danh mục sản phẩm</p>
+                <h3>@ViewBag.TotalProducts</h3>
+                <p>Số lượng sản phẩm theo<br /> danh mục</p>
+                <h3>@ViewBag.TotalSanPham</h3>
+            </div>
+            <div class="card stat highlight">
+                <div>
+                    <p>Doanh thu hôm nay</p>
+                    <span>@ViewBag.RevenueToday.ToString("N0") VND</span>
+                </div>
+                <div>
+                    <p>Đơn hàng</p>
+                    <span>@ViewBag.TotalOrdersToday</span>
+                </div>
+
+            </div>
+
+            <div class="card stat highlight">
+                <div>
+                    <p>Doanh thu tháng</p>
+                    <span>@ViewBag.RevenueMonth.ToString("N0") VND</span>
+                </div>
+                <div>
+                    <p>Đơn hàng</p>
+                    <span>@ViewBag.TotalOrders</span>
+                </div>
+            </div>
+
+            <div class="card stat">
+                <p>Tổng tồn kho</p>
+                <h3>@ViewBag.TotalStock</h3>
+                <div class="view-all-container" style="margin-top:60px">
+                   @*  <a href="@Url.Action("Index", "DonHang")" class="btn-view-all">Xem tất cả</a> *@
+                </div>
+            </div>
+            <!-- Nút mở modal -->
+            <button class="btn btn-main btn-custom" data-bs-toggle="modal" data-bs-target="#danhMucModal" style="min-height:200px">
+                + Danh mục
+            </button>
+
+            <!-- Modal Danh Mục -->
+            <div class="modal fade" id="danhMucModal" tabindex="-1" aria-labelledby="danhMucModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="danhMucModalLabel">Danh sách danh mục</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên danh mục</th>
+                                        <th>Mô tả</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.DanhMucs != null)
+                                    {
+                                        int index = 1;
+                                        foreach (var dm in ViewBag.DanhMucs)
+                                        {
+                                            <tr>
+                                                <td>@index</td>
+                                                <td>@dm.TenDanhMuc</td>
+                                                <td>@dm.MoTa</td>
+                                                <td>@dm.NgayTao.ToString("dd/MM/yyyy")</td>
+                                                <td>
+                                                    <form asp-action="Delete" asp-controller="DanhMuc" method="post"
+                                                          style="display:inline" onsubmit="return confirm('Bạn có chắc muốn xóa?');">
+                                                        <input type="hidden" name="id" value="@dm.DanhMucId" />
+                                                        <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            index++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="5" class="text-center">Không có danh mục nào</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- Nút mở modal -->
+            <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#usersModal">
+                + Người dùng
+            </button>
+
+            <!-- Modal Người Dùng -->
+            <div class="modal fade" id="usersModal" tabindex="-1" aria-labelledby="usersModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="usersModalLabel">Danh sách người dùng</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên đăng nhập</th>
+                                        <th>Họ và tên</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.Users != null)
+                                    {
+                                        int index = 1;
+                                        foreach (var user in ViewBag.Users)
+                                        {
+                                            <tr>
+                                                <td>@index</td>
+                                                <td>@user.Email</td>
+                                                <td>@user.HoTen</td>
+                                                <td>@user.SoDienThoai</td>
+                                                <td>@user.NgayTao.ToString("dd/MM/yyyy")</td>
+                                                <td>
+                                                    <form asp-action="Delete" asp-controller="Account" method="post"
+                                                          style="display:inline" onsubmit="return confirm('Bạn có chắc muốn xóa người dùng này?');">
+                                                        <input type="hidden" name="id" value="@user.UserId" />
+                                                        <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            index++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="5" class="text-center">Không có người dùng nào</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- Nút mở modal -->
+            <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#productListModal">
+                Xem sản phẩm
+            </button>
+
+            <!-- Modal danh sách sản phẩm -->
+            <div class="modal fade" id="productListModal" tabindex="-1" aria-labelledby="productListModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productListModalLabel">Danh sách sản phẩm</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Danh mục</th>
+                                        <th>Số lượng</th>
+                                        <th>Giá</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.SanPhams != null && (ViewBag.SanPhams as List<ChauChau.Models.SanPham>).Count > 0)
+                                    {
+                                        int index = 1;
+                                        foreach (var p in ViewBag.SanPhams as List<ChauChau.Models.SanPham>)
+                                        {
+                                            <tr>
+                                                <td>@index</td>
+                                                <td>@p.TenSanPham</td>
+                                                <td>@p.DanhMuc?.TenDanhMuc</td>
+                                                <td>@(p.Variants != null ? p.Variants.Sum(v => v.SoLuong) : 0)</td>
+                                                <td>
+                                                    @if (p.Variants != null && p.Variants.Count > 0)
+                                                    {
+                                                        @(p.Variants.First().Gia.ToString("N0") + " VND")
+                                                    }
+                                                    else
+                                                    {
+                                                        <text>Chưa có</text>
+                                                    }
+                                                </td>
+                                                <td>@p.NgayTao.ToString("dd/MM/yyyy")</td>
+                                                <td>
+                                                    <form asp-action="Delete" asp-controller="SanPham" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa?');">
+                                                        <input type="hidden" name="id" value="@p.SanPhamId" />
+                                                        <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            index++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="6" class="text-center">Chưa có sản phẩm nào</td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#ordersTodayModal">
+                Đơn hàng hôm nay
+            </button>
+            <div class="modal fade" id="ordersTodayModal" tabindex="-1" aria-labelledby="ordersTodayModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ordersTodayModalLabel">Danh sách đơn hàng thanh toán hôm nay</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Mã đơn hàng</th>
+                                        <th>Người đặt</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Chi tiết sản phẩm</th>
+                                        <th>Ngày mua</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.OrdersToday != null && (ViewBag.OrdersToday as List<ChauChau.Models.DonHang>).Count > 0)
+                                    {
+                                        int index = 1;
+                                        foreach (var order in ViewBag.OrdersToday as List<ChauChau.Models.DonHang>)
+                                        {
+                                            <tr>
+                                                <td>@index</td>
+                                                <td>@order.DonHangId</td>
+                                                <td>@order.User.HoTen</td> <!-- hoặc user name nếu bạn include bảng User -->
+                                                <td>@order.TongTien.ToString("N0") VND</td>
+                                                <td>
+                                                   <form asp-controller="DonHang" asp-action="Details">
+                                                       <input type="hidden" value="@order.DonHangId" name="id" />
+                                                       <button class="btn btn btn-sm" style="background-color:darkorange">
+                                                           Xem chi tiết
+                                                       </button>
+                                                   </form>
+                                                </td>
+                                                <td>@order.NgayTao.ToString("dd/MM/yyyy HH:mm")</td>
+                                            </tr>
+                                            index++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="6" class="text-center">Chưa có đơn hàng hôm nay</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-main" data-bs-toggle="modal" data-bs-target="#ordersMonthModal">
+                Đơn hàng tháng
+            </button>
+            <div class="modal fade" id="ordersMonthModal" tabindex="-1" aria-labelledby="ordersMonthModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ordersMonthModalLabel">Đơn hàng thanh toán trong tháng</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Mã đơn hàng</th>
+                                        <th>Người đặt</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Chi tiết sản phẩm</th>
+                                        <th>Ngày tạo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.OrdersMonth != null && (ViewBag.OrdersMonth as List<ChauChau.Models.DonHang>).Count > 0)
+                                    {
+                                        int index = 1;
+                                        foreach (var order in ViewBag.OrdersMonth as List<ChauChau.Models.DonHang>)
+                                        {
+                                            <tr>
+                                                <td>@index</td>
+                                                <td>@order.DonHangId</td>
+                                                <td>@order.User?.HoTen</td>
+                                                <td>@order.TongTien.ToString("N0") VND</td>
+                                                <td>
+                                                  <form asp-action="Details" asp-controller="DonHang">
+                                                      <input type="hidden" value="@order.DonHangId" name="id" />
+                                                      <button class="btn btn btn-sm" style="background-color:darkorange">Xem chi tiết</button>
+                                                  </form>
+                                                </td>
+                                                <td>@order.NgayTao.ToString("dd/MM/yyyy HH:mm")</td>
+                                            </tr>
+                                            index++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="6" class="text-center">Chưa có đơn hàng trong tháng</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Chart -->
+        <section class="chart-section card">
+            <h4>Biểu đồ doanh thu tháng</h4>
+            <canvas id="revenueChart"></canvas>
+        </section>
+
+    </main>
+</div>
+<!-- Modal Thêm Sản Phẩm -->
+<!-- Modal Thêm Sản Phẩm -->
+<div class="modal fade" id="themSanPhamModal" tabindex="-1" aria-labelledby="themSanPhamModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="themSanPhamModalLabel">Thêm sản phẩm mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form asp-action="Create" asp-controller="SanPham" method="post" enctype="multipart/form-data">
+
+                    <!-- Tên sản phẩm -->
+                    <div class="mb-3">
+                        <label class="form-label">Tên sản phẩm</label>
+                        <input type="text" name="TenSanPham" class="form-control" required />
+                    </div>
+
+                    <!-- Mô tả -->
+                    <div class="mb-3">
+                        <label class="form-label">Mô tả</label>
+                        <textarea name="MoTa" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <!-- Danh mục -->
+                    <div class="mb-3">
+                        <label class="form-label">Danh mục</label>
+                        <select name="DanhMucId" class="form-select" required>
+                            @foreach (var dm in ViewBag.DanhMucs)
+                            {
+                                <option value="@dm.DanhMucId">@dm.TenDanhMuc</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Variant -->
+                    <div class="variant-container mb-3">
+                        <h6>Variants</h6>
+                        <div class="variant-item mb-2">
+                            <input type="text" name="Variants[0].MauSac" placeholder="Màu sắc" class="form-control mb-1" required />
+                            <input type="text" name="Variants[0].KichCo" placeholder="Size" class="form-control mb-1" required />
+                            <input type="number" name="Variants[0].Gia" placeholder="Giá" class="form-control mb-1" required />
+                            <input type="number" name="Variants[0].SoLuong" placeholder="Số lượng" class="form-control mb-1" required />
+                            <input type="file" name="Variants[0].HinhAnhs" multiple accept="image/*" class="form-control mb-1" />
+                            <button type="button" class="btn btn-sm btn-danger remove-variant">Xóa variant</button>
+                            <div class="image-preview d-flex gap-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- Nút thêm variant -->
+                    <button type="button" class="btn btn-secondary mb-3" id="addVariantBtn">+ Thêm variant</button>
+
+                    <!-- Nút submit -->
+                    <button type="submit" class="btn btn-main">Thêm sản phẩm</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS -->
+@* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> *@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Chart
+    const ctx = document.getElementById('revenueChart');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.DaysInMonth)),
+            datasets: [{
+                label: "Doanh thu",
+                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.RevenuePerDay)),
+                borderWidth: 2,
+                borderColor: "#3B82F6",
+                backgroundColor: "rgba(59, 130, 246, 0.15)",
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+</script>
+<script>
+    let variantIndex = 1;
+    const container = document.querySelector(".variant-container");
+
+    // Thêm variant mới
+    document.getElementById("addVariantBtn").addEventListener("click", function () {
+        const variantHtml = `
+        <div class="variant-item mb-2">
+            <input type="text" name="Variants[${variantIndex}].MauSac" placeholder="Màu sắc" class="form-control mb-1" required />
+            <input type="text" name="Variants[${variantIndex}].KichCo" placeholder="Size" class="form-control mb-1" required />
+            <input type="number" name="Variants[${variantIndex}].Gia" placeholder="Giá" class="form-control mb-1" required />
+            <input type="number" name="Variants[${variantIndex}].SoLuong" placeholder="Số lượng" class="form-control mb-1" required />
+            <input type="file" name="Variants[${variantIndex}].HinhAnhs" multiple accept="image/*" class="form-control mb-1" />
+            <button type="button" class="btn btn-sm btn-danger remove-variant">Xóa variant</button>
+            <div class="image-preview d-flex gap-2"></div>
+        </div>`;
+        container.insertAdjacentHTML("beforeend", variantHtml);
+        variantIndex++;
+    });
+
+    // Xóa variant
+    container.addEventListener("click", function (e) {
+        if (e.target.classList.contains("remove-variant")) {
+            e.target.parentElement.remove();
+        }
+    });
+</script>
+<script>
+    const ctx = document.getElementById('revenueChart');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.DaysInMonth)),
+            datasets: [{
+                label: 'Doanh thu theo ngày (VND)',
+                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.RevenuePerDay)),
+                borderWidth: 2,
+                fill: false,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>

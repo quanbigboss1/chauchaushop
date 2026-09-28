@@ -1,0 +1,235 @@
+﻿@model List<ChauChau.Models.GioHang>
+
+@{
+    ViewData["Title"] = "Thanh toán";
+}
+
+<link rel="stylesheet" href="~/css/checkout.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<div class="checkout-wrapper" style="min-width:1200px">
+
+    <!-- LEFT: SHIPPING INFO -->
+    <div class="checkout-left">
+        <div class="card-box">
+            <h3 class="box-title">Thông tin giao hàng</h3>
+
+            <form id="checkoutForm">
+
+                <input type="hidden" name="TinhThanh" />
+                <input type="hidden" name="QuanHuyen" />
+                <input type="hidden" name="PhuongXa" />
+
+                <div class="form-group">
+                    <label>Họ tên</label>
+                    <input type="text" name="HoTen" class="form-control" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Số điện thoại</label>
+                    <input type="text" name="SoDienThoai" class="form-control" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Địa chỉ chi tiết</label>
+                    <input type="text" name="DiaChiChiTiet" class="form-control" required />
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label>Tỉnh/Thành phố</label>
+                        <select id="province" class="form-control" required></select>
+                    </div>
+
+                    <div class="col-md-4 form-group">
+                        <label>Quận/Huyện</label>
+                        <select id="district" class="form-control" required></select>
+                    </div>
+
+                    <div class="col-md-4 form-group">
+                        <label>Phường/Xã</label>
+                        <select id="ward" class="form-control" required></select>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="card-box mt-3">
+            <h3 class="box-title">Sản phẩm</h3>
+
+            <table class="table cart-table">
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>SL</th>
+                        <th>Tổng</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.SanPhamVariant.SanPham.TenSanPham</td>
+                            <td>@item.SanPhamVariant.Gia.ToString("N0") đ</td>
+                            <td>@item.SoLuong</td>
+                            <td>@((item.SoLuong * item.SanPhamVariant.Gia).ToString("N0")) đ</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- RIGHT: PAYMENT SUMMARY -->
+    <div class="checkout-right">
+        <div class="card-box payment-box">
+            <h3 class="box-title">Thanh toán</h3>
+
+            <div class="total-amount">
+                <span>Tổng thanh toán</span>
+                <span class="price">@ViewBag.Total.ToString("N0") đ</span>
+            </div>
+
+            <!-- VNPay -->
+            <form method="post" asp-controller="Test" asp-action="PayOnline"
+                  onsubmit="return validateCheckout() && appendAddress(this);">
+                <button class="btn-pay btn-vnpay">
+                    <i class="fa-solid fa-credit-card"></i> Thanh toán VNPay
+                </button>
+            </form>
+
+            <!-- MoMo -->
+            <form method="post" asp-controller="Test" asp-action="PayOnlineWithMomo"
+                  onsubmit="return validateCheckout() && appendAddress(this);">
+
+                <button class="btn-pay btn-momo">
+                    <i class="fa-solid fa-wallet"></i> Thanh toán MoMo
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- ------------------ JAVASCRIPT LOAD TỈNH – QUẬN – XÃ ------------------- -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const provinceSelect = document.getElementById("province");
+        const districtSelect = document.getElementById("district");
+        const wardSelect = document.getElementById("ward");
+
+        const hiddenProvince = document.querySelector("input[name='TinhThanh']");
+        const hiddenDistrict = document.querySelector("input[name='QuanHuyen']");
+        const hiddenWard = document.querySelector("input[name='PhuongXa']");
+
+        // Load Tỉnh
+        fetch("https://provinces.open-api.vn/api/?depth=1")
+            .then(res => res.json())
+            .then(data => {
+                provinceSelect.innerHTML = '<option value="">-- Chọn tỉnh/thành --</option>';
+                data.forEach(p => {
+                    provinceSelect.innerHTML += `<option value="${p.code}" data-name="${p.name}">${p.name}</option>`;
+                });
+            });
+
+        // Khi chọn Tỉnh
+        provinceSelect.addEventListener("change", function () {
+            const code = this.value;
+            const name = this.options[this.selectedIndex].dataset.name;
+            hiddenProvince.value = name;
+
+            loadDistricts(code);
+        });
+
+        function loadDistricts(provinceCode) {
+            fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`)
+                .then(res => res.json())
+                .then(data => {
+                    districtSelect.innerHTML = '<option value="">-- Chọn quận/huyện --</option>';
+                    wardSelect.innerHTML = '<option value="">-- Chọn phường/xã --</option>';
+                    data.districts.forEach(d => {
+                        districtSelect.innerHTML += `<option value="${d.code}" data-name="${d.name}">${d.name}</option>`;
+                    });
+                });
+        }
+
+        // Khi chọn Quận/Huyện
+        districtSelect.addEventListener("change", function () {
+            const code = this.value;
+            const name = this.options[this.selectedIndex].dataset.name;
+            hiddenDistrict.value = name;
+
+            loadWards(code);
+        });
+
+        function loadWards(districtCode) {
+            fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`)
+                .then(res => res.json())
+                .then(data => {
+                    wardSelect.innerHTML = '<option value="">-- Chọn phường/xã --</option>';
+                    data.wards.forEach(w => {
+                        wardSelect.innerHTML += `<option value="${w.code}" data-name="${w.name}">${w.name}</option>`;
+                    });
+                });
+        }
+
+        // Khi chọn Phường/Xã
+        wardSelect.addEventListener("change", function () {
+            const name = this.options[this.selectedIndex].dataset.name;
+            hiddenWard.value = name;
+        });
+
+    });
+</script>
+
+<!-- ------------------ VALIDATE + APPEND ADDRESS ------------------- -->
+<script>
+    function validateCheckout() {
+        const fullName = document.querySelector("[name='HoTen']").value.trim();
+        const phone = document.querySelector("[name='SoDienThoai']").value.trim();
+        const address = document.querySelector("[name='DiaChiChiTiet']").value.trim();
+
+        const province = document.getElementById("province").value;
+        const district = document.getElementById("district").value;
+        const ward = document.getElementById("ward").value;
+
+        let message = "";
+
+        if (fullName === "") message += "- Vui lòng nhập họ tên.\n";
+        if (phone === "") message += "- Vui lòng nhập số điện thoại.\n";
+        if (!/^(0[0-9]{9})$/.test(phone)) message += "- Số điện thoại không hợp lệ (10 số, bắt đầu bằng 0).\n";
+        if (address === "") message += "- Vui lòng nhập địa chỉ chi tiết.\n";
+
+        if (province === "") message += "- Chọn tỉnh/thành phố.\n";
+        if (district === "") message += "- Chọn quận/huyện.\n";
+        if (ward === "") message += "- Chọn phường/xã.\n";
+
+        if (message !== "") {
+            alert("❗ Vui lòng hoàn thành các thông tin sau:\n\n" + message);
+            return false;
+        }
+
+        return true;
+    }
+
+    function appendAddress(form) {
+        const mainForm = document.getElementById("checkoutForm");
+
+        ["HoTen", "SoDienThoai", "DiaChiChiTiet", "TinhThanh", "QuanHuyen", "PhuongXa"]
+            .forEach(name => {
+                let value = mainForm.querySelector(`[name=${name}]`).value;
+                let input = document.createElement("input");
+                input.type = "hidden";
+                input.name = name;
+                input.value = value;
+                form.appendChild(input);
+            });
+
+        return true;
+    }
+</script>
